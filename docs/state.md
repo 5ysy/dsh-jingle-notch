@@ -1,6 +1,6 @@
 # JingleNotch implementation state
 
-Updated: 2026-11-02. Checkout: `dev_plugins/dsh-jingle-notch`. Release candidate 0.1.0 verified; GitHub push and npm publication are in progress.
+Updated: 2026-11-02. Checkout: `dev_plugins/dsh-jingle-notch`. Release candidate 0.1.0 verified and pushed to public GitHub main; npm publication awaits account 2FA.
 
 ## Identity and runtime contracts
 
@@ -48,4 +48,6 @@ Updated: 2026-11-02. Checkout: `dev_plugins/dsh-jingle-notch`. Release candidate
 - Release tarball contains 25 allowlisted files and 32 valid local documentation links. SHA-256: `71889799f1a9b718a488d25103fdc4c0a740e045b43430a2fa822f0bfdde195d`. Credential-pattern scan found no embedded credentials.
 - Required workspace `uv run pytest` reports 21 upstream Python SDK collection errors from unavailable `deepseek_harness` / `deepseek_harness_runtime` modules. `uv run ruff .` cannot launch because Ruff is unavailable. No Python implementation changes are part of the release.
 - Evidence: `/tmp/jingle-notch-release-20261102/{host-matrix.log,native.log,audit.json}`; Host results: `/var/folders/s1/qy1f70fs1897ny9jlylx_b6c0000gn/T/dsh-jingle-notch-host-matrix-QmDLev/results.json`.
-- Pending: GitHub commits/push, npm upload, registry integrity and installation verification, version tag and GitHub release.
+- GitHub: public main pushed successfully using the authorized 5ysy account. Runtime, tests and documentation are separate Conventional Commits. Repository description, homepage and discovery topics are configured. Local origin uses a username-qualified HTTPS URL to avoid the machine-wide HTTPS-to-SSH rewrite selecting another GitHub identity.
+- npm: CLI login as the package owner succeeded and tarball dry-run passed. Actual upload was rejected with HTTP 403: account two-factor authentication is required. The owner was asked to enable 2FA in npm settings. No package version has been claimed published.
+- Pending: account-owner 2FA setup, npm upload, registry integrity and installation verification, final tag and GitHub release.
