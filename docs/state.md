@@ -1,6 +1,6 @@
 # JingleNotch implementation state
 
-Updated: 2026-11-02. Checkout: `dev_plugins/dsh-jingle-notch`. Version 0.1.0 is public on npm; GitHub main and the registry installation are verified. GitHub release finalization is in progress.
+Updated: 2026-11-02. Checkout: `dev_plugins/dsh-jingle-notch`. Version 0.1.0 is public on npm and GitHub Releases; main, registry integrity and actual registry installation are verified. Release work is complete.
 
 ## Identity and runtime contracts
 
@@ -52,4 +52,4 @@ Updated: 2026-11-02. Checkout: `dev_plugins/dsh-jingle-notch`. Version 0.1.0 is 
 - npm: the owner enabled 2FA and authorized the publish operation. Public registry now exposes dsh-jingle-notch@0.1.0 with latest=0.1.0. Its SHA-1 and SHA-512 integrity match the uploaded archive; a fresh `npm pack dsh-jingle-notch@0.1.0` download is byte-identical (SHA-256 above). npm displays README.zh.md and its installation/features sections match the committed file.
 - Published-registry installation passes the same complete Desktop/Web/source matrix with `JINGLE_NOTCH_TEST_PACKAGE=dsh-jingle-notch@0.1.0`, including native overlay and Host survival. Evidence: `/tmp/jingle-notch-release-20261102/registry-host-matrix.log`; results: `/var/folders/s1/qy1f70fs1897ny9jlylx_b6c0000gn/T/dsh-jingle-notch-host-matrix-wc6yUT/results.json`.
 - Production dependency audit reports no runtime dependencies to audit; Cordis/Schemastery are host peer dependencies. The source/security checks and Host admission/isolation tests provide the relevant plugin evidence.
-- Release artifact: GitHub v0.1.0 uses the same verified archive; the uploaded asset SHA-256 digest matches the npm tarball. The final tag/release is being published from this release-state commit.
+- Release artifact: public GitHub v0.1.0 (non-draft, non-prerelease) uses the same verified archive; the uploaded asset SHA-256 digest matches the npm tarball. Annotated tag v0.1.0 points to release-verification commit cf00345. URLs: https://github.com/5ysy/dsh-jingle-notch/releases/tag/v0.1.0 and https://www.npmjs.com/package/dsh-jingle-notch. No release steps remain pending.
