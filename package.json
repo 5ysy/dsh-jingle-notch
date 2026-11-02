@@ -1,0 +1,95 @@
+{
+  "name": "dsh-jingle-notch",
+  "description": "JingleNotch — AI Agent Approval Notifier for DeepSeek Harness. 鲸铃 Jingle brings approvals, plan reviews and live session activity to the macOS notch.",
+  "version": "0.1.0",
+  "license": "MIT",
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./dashboard": {
+      "types": "./lib/dashboard.d.ts",
+      "default": "./lib/dashboard.js"
+    },
+    "./commands": {
+      "types": "./lib/commands.d.ts",
+      "default": "./lib/commands.js"
+    },
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "assets/whale",
+    "cordis.patch.yml",
+    "README.md",
+    "README.zh.md",
+    "docs/installation.md",
+    "docs/configuration.md",
+    "docs/development.md",
+    "docs/images",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "compatibility": {
+      "dshReleases": {
+        "0.2.1-rc.5": "compatible",
+        "0.2.2-alpha.2": "compatible"
+      }
+    }
+  },
+  "engines": {
+    "dsh": ">=0.2.1-rc.0"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "prepare": "tsdown",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "test:electron": "pnpm build && node tests/electron-smoke.mjs",
+    "test:harness": "pnpm build && node tests/harness-smoke.mjs"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": ">=4.0.5",
+    "@deepseek-ai/schemastery": ">=3.18.5"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "^4.0.5",
+    "@deepseek-ai/schemastery": "^3.18.5",
+    "@types/node": "^24.10.1",
+    "tsdown": "^0.23.1",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/5ysy/dsh-jingle-notch.git"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "jingle-notch",
+    "jingle",
+    "macos",
+    "notch",
+    "ai-agent",
+    "approval",
+    "notifications"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "icon": "assets/whale/layered-poster.webp",
+  "homepage": "https://github.com/5ysy/dsh-jingle-notch#readme",
+  "bugs": {
+    "url": "https://github.com/5ysy/dsh-jingle-notch/issues"
+  }
+}
