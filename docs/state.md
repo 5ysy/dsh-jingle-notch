@@ -1,6 +1,6 @@
 # JingleNotch implementation state
 
-Updated: 2026-11-02. Checkout: `dev_plugins/dsh-jingle-notch`. Release candidate 0.1.0 verified and pushed to public GitHub main; npm publication awaits account 2FA.
+Updated: 2026-11-02. Checkout: `dev_plugins/dsh-jingle-notch`. Version 0.1.0 is public on npm; GitHub main and the registry installation are verified. GitHub release finalization is in progress.
 
 ## Identity and runtime contracts
 
@@ -49,5 +49,7 @@ Updated: 2026-11-02. Checkout: `dev_plugins/dsh-jingle-notch`. Release candidate
 - Required workspace `uv run pytest` reports 21 upstream Python SDK collection errors from unavailable `deepseek_harness` / `deepseek_harness_runtime` modules. `uv run ruff .` cannot launch because Ruff is unavailable. No Python implementation changes are part of the release.
 - Evidence: `/tmp/jingle-notch-release-20261102/{host-matrix.log,native.log,audit.json}`; Host results: `/var/folders/s1/qy1f70fs1897ny9jlylx_b6c0000gn/T/dsh-jingle-notch-host-matrix-QmDLev/results.json`.
 - GitHub: public main pushed successfully using the authorized 5ysy account. Runtime, tests and documentation are separate Conventional Commits. Repository description, homepage and discovery topics are configured. Local origin uses a username-qualified HTTPS URL to avoid the machine-wide HTTPS-to-SSH rewrite selecting another GitHub identity.
-- npm: CLI login as the package owner succeeded and tarball dry-run passed. Actual upload was rejected with HTTP 403: account two-factor authentication is required. The owner was asked to enable 2FA in npm settings. No package version has been claimed published.
-- Pending: account-owner 2FA setup, npm upload, registry integrity and installation verification, final tag and GitHub release.
+- npm: the owner enabled 2FA and authorized the publish operation. Public registry now exposes dsh-jingle-notch@0.1.0 with latest=0.1.0. Its SHA-1 and SHA-512 integrity match the uploaded archive; a fresh `npm pack dsh-jingle-notch@0.1.0` download is byte-identical (SHA-256 above). npm displays README.zh.md and its installation/features sections match the committed file.
+- Published-registry installation passes the same complete Desktop/Web/source matrix with `JINGLE_NOTCH_TEST_PACKAGE=dsh-jingle-notch@0.1.0`, including native overlay and Host survival. Evidence: `/tmp/jingle-notch-release-20261102/registry-host-matrix.log`; results: `/var/folders/s1/qy1f70fs1897ny9jlylx_b6c0000gn/T/dsh-jingle-notch-host-matrix-wc6yUT/results.json`.
+- Production dependency audit reports no runtime dependencies to audit; Cordis/Schemastery are host peer dependencies. The source/security checks and Host admission/isolation tests provide the relevant plugin evidence.
+- Release artifact: GitHub v0.1.0 uses the same verified archive; the uploaded asset SHA-256 digest matches the npm tarball. The final tag/release is being published from this release-state commit.
