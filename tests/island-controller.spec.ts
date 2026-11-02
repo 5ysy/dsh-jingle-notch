@@ -1,0 +1,125 @@
+import { describe, expect, it } from 'vitest'
+import { IslandController } from '../src/overlay/controller.ts'
+import { DEFAULT_OVERLAY_PREFERENCES as defaults } from '../src/overlay/preferences.ts'
+
+describe('notch island lifecycle', () => {
+  it('opens on hover and folds after the pointer leaves with an edge grace period', () => {
+    const island = new IslandController(defaults)
+    island.hover(true, 0)
+    expect(island.mode).toBe('expanded')
+    island.hover(false, 100)
+    island.tick(699)
+    expect(island.mode).toBe('expanded')
+    island.hover(true, 699)
+    island.tick(1000)
+    expect(island.mode).toBe('expanded')
+    island.hover(false, 1000)
+    island.tick(1600)
+    expect(island.mode).toBe('compact')
+  })
+
+  it('uses the configured duration after a click, cancelling stale hover deadlines', () => {
+    const island = new IslandController(defaults)
+    island.hover(true, 0)
+    island.interact(100)
+    island.hover(false, 200)
+    island.tick(800)
+    expect(island.mode).toBe('expanded')
+    expect(island.closeAt).toBe(15200)
+    island.tick(15200)
+    expect(island.mode).toBe('compact')
+  })
+
+  it('auto-closes a clicked panel after the configured duration while the pointer remains over it', () => {
+    const island = new IslandController({ ...defaults, autoCloseSeconds:5 })
+    island.hover(true, 0)
+    island.open('click', 1)
+    expect(island.closeAt).toBe(5001)
+    island.tick(5001)
+    expect(island.mode).toBe('compact')
+  })
+
+  it('keeps settings and edited forms open until the hold is released', () => {
+    const island = new IslandController(defaults)
+    island.open('click', 0)
+    island.hold(true, 1)
+    island.tick(100000)
+    expect(island.mode).toBe('expanded')
+    expect(island.closeAt).toBeNull()
+    island.hold(false, 100000)
+    expect(island.closeAt).toBe(115000)
+    island.collapse(100001)
+    island.tick(115000)
+    expect(island.mode).toBe('compact')
+  })
+
+  it('allows clicking when hover opening is disabled, including hidden re-entry', () => {
+    const island = new IslandController({ ...defaults, openOnHover:false })
+    island.hover(true, 0)
+    expect(island.mode).toBe('compact')
+    island.open('click', 1)
+    expect(island.mode).toBe('expanded')
+  })
+
+  it('hides the compact wings after configured inactivity and restores them on hover', () => {
+    const island = new IslandController({ ...defaults, openOnHover:false, hideAfterSeconds:60 })
+    island.tick(60000)
+    expect(island.mode).toBe('hidden')
+    island.hover(true, 60001)
+    expect(island.mode).toBe('compact')
+    island.hover(false, 60002)
+    island.tick(120001)
+    expect(island.mode).toBe('compact')
+    island.tick(120002)
+    expect(island.mode).toBe('hidden')
+  })
+
+  it('never times out when the corresponding timers are disabled', () => {
+    const island = new IslandController({ ...defaults, autoCloseSeconds:0, hideAfterSeconds:0 })
+    island.open('click', 0)
+    island.tick(1000000)
+    expect(island.mode).toBe('expanded')
+    island.collapse(1000001)
+    island.tick(2000000)
+    expect(island.mode).toBe('compact')
+  })
+
+  it('expands by default once per newly actionable request and ignores removals', () => {
+    const island = new IslandController(defaults)
+    island.attention(['a'], 1)
+    expect(island.mode).toBe('expanded')
+    island.collapse(2)
+    island.attention(['a'], 3)
+    expect(island.mode).toBe('compact')
+    island.attention(['a','b'], 4)
+    expect(island.mode).toBe('expanded')
+    island.collapse(5)
+    island.attention(['b'], 6)
+    expect(island.mode).toBe('compact')
+    island.attention([], 7)
+    island.attention(['b'], 8)
+    expect(island.mode).toBe('expanded')
+  })
+
+  it('respects an explicit opt-out while restoring hidden wings for a request', () => {
+    const island = new IslandController({...defaults,expandOnAttention:false,hideAfterSeconds:60})
+    island.tick(60000)
+    expect(island.mode).toBe('hidden')
+    island.attention(['a'],60001)
+    expect(island.mode).toBe('compact')
+  })
+
+  it('recomputes active deadlines when settings change and leaves Escape collapsed under the pointer', () => {
+    const island = new IslandController(defaults)
+    island.open('click', 0)
+    island.configure({ ...defaults, autoCloseSeconds:5 }, 1000)
+    expect(island.closeAt).toBe(6000)
+    island.hover(true, 2000)
+    island.collapse(2001)
+    island.tick(50000)
+    expect(island.mode).toBe('compact')
+    island.hover(false, 50001)
+    island.hover(true, 50002)
+    expect(island.mode).toBe('expanded')
+  })
+})
