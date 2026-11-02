@@ -52,9 +52,16 @@ Updated: 2026-11-02. Checkout: `dev_plugins/dsh-jingle-notch`. Version 0.1.0 is 
 - npm: the owner enabled 2FA and authorized the publish operation. Public registry now exposes dsh-jingle-notch@0.1.0 with latest=0.1.0. Its SHA-1 and SHA-512 integrity match the uploaded archive; a fresh `npm pack dsh-jingle-notch@0.1.0` download is byte-identical (SHA-256 above). npm displays README.zh.md and its installation/features sections match the committed file.
 - Published-registry installation passes the same complete Desktop/Web/source matrix with `JINGLE_NOTCH_TEST_PACKAGE=dsh-jingle-notch@0.1.0`, including native overlay and Host survival. Evidence: `/tmp/jingle-notch-release-20261102/registry-host-matrix.log`; results: `/var/folders/s1/qy1f70fs1897ny9jlylx_b6c0000gn/T/dsh-jingle-notch-host-matrix-wc6yUT/results.json`.
 - Production dependency audit reports no runtime dependencies to audit; Cordis/Schemastery are host peer dependencies. The source/security checks and Host admission/isolation tests provide the relevant plugin evidence.
-- Release artifact: public GitHub v0.1.0 (non-draft, non-prerelease) uses the same verified archive; the uploaded asset SHA-256 digest matches the npm tarball. Annotated tag v0.1.0 points to release-verification commit cf00345. URLs: https://github.com/5ysy/dsh-jingle-notch/releases/tag/v0.1.0 and https://www.npmjs.com/package/dsh-jingle-notch. No release steps remain pending.
+- Release artifact: public GitHub v0.1.0 (non-draft, non-prerelease) uses the same verified archive; the uploaded asset SHA-256 digest matches the npm tarball. Annotated tag v0.1.0 points to release-verification commit ef3fc88. URLs: https://github.com/5ysy/dsh-jingle-notch/releases/tag/v0.1.0 and https://www.npmjs.com/package/dsh-jingle-notch. No release steps remain pending.
 
 ## Contributor attribution · 2026-11-02
 
 - Updated the project MIT copyright holder from `JingleNotch contributors` to `5ysy` at the owner's request. Third-party copyright notices retain their original attribution. No runtime, dependency or version changes.
 - Verified the exact LICENSE attribution, retained third-party attribution and `git diff --check`. Required workspace Python checks were attempted again: pytest still encounters upstream SDK import errors during collection, and Ruff is unavailable. Logs: `/tmp/jingle-notch-attribution-pytest.log` and `/tmp/jingle-notch-attribution-ruff.log`.
+
+## GitHub contribution attribution · 2026-11-02
+
+- Root cause: all seven initial commits and the annotated release tag inherited the machine-wide 9yly Git identity, so GitHub associated them with that account. LICENSE attribution alone does not change commit attribution.
+- Configured this repository's author and committer as `5ysy <279584877+5ysy@users.noreply.github.com>` using the public GitHub account ID. Rewrote those seven commits and the annotated v0.1.0 tag to that identity, preserving each commit's file tree, message and timestamps. Future commits use the repository-local identity.
+- Verified every rewritten commit tree against its original and retained an external bundle plus SHA mapping in `/tmp/jingle-notch-github-attribution-20261102`. Synchronization uses atomic updates with explicit force-with-lease expectations for main and v0.1.0.
+- Required workspace Python commands were attempted: pytest still reports 21 upstream SDK collection errors, and Ruff is unavailable. Source content is identical throughout the history rewrite; only this state record changes after it.
