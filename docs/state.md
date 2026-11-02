@@ -53,3 +53,8 @@ Updated: 2026-11-02. Checkout: `dev_plugins/dsh-jingle-notch`. Version 0.1.0 is 
 - Published-registry installation passes the same complete Desktop/Web/source matrix with `JINGLE_NOTCH_TEST_PACKAGE=dsh-jingle-notch@0.1.0`, including native overlay and Host survival. Evidence: `/tmp/jingle-notch-release-20261102/registry-host-matrix.log`; results: `/var/folders/s1/qy1f70fs1897ny9jlylx_b6c0000gn/T/dsh-jingle-notch-host-matrix-wc6yUT/results.json`.
 - Production dependency audit reports no runtime dependencies to audit; Cordis/Schemastery are host peer dependencies. The source/security checks and Host admission/isolation tests provide the relevant plugin evidence.
 - Release artifact: public GitHub v0.1.0 (non-draft, non-prerelease) uses the same verified archive; the uploaded asset SHA-256 digest matches the npm tarball. Annotated tag v0.1.0 points to release-verification commit cf00345. URLs: https://github.com/5ysy/dsh-jingle-notch/releases/tag/v0.1.0 and https://www.npmjs.com/package/dsh-jingle-notch. No release steps remain pending.
+
+## Contributor attribution · 2026-11-02
+
+- Updated the project MIT copyright holder from `JingleNotch contributors` to `5ysy` at the owner's request. Third-party copyright notices retain their original attribution. No runtime, dependency or version changes.
+- Verified the exact LICENSE attribution, retained third-party attribution and `git diff --check`. Required workspace Python checks were attempted again: pytest still encounters upstream SDK import errors during collection, and Ruff is unavailable. Logs: `/tmp/jingle-notch-attribution-pytest.log` and `/tmp/jingle-notch-attribution-ruff.log`.
