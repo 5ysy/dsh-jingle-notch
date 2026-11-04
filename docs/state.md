@@ -1,6 +1,15 @@
 # JingleNotch implementation state
 
-Updated: 2026-11-04. Checkout: `dev_plugins/dsh-jingle-notch`. Version 0.1.0 is public on npm and GitHub Releases. The lifecycle and Desktop runtime changes below are being synchronized to GitHub main; publishing an updated npm package is a separate release operation.
+Updated: 2026-11-04. Checkout: `dev_plugins/dsh-jingle-notch`. Version 0.1.1 is public on npm with latest=0.1.1. Registry integrity, downloaded archive and actual registry installation are verified.
+
+## npm release 0.1.1 · 2026-11-04
+
+- Published the plugin lifecycle and Desktop runtime fixes as `dsh-jingle-notch@0.1.1`, with public access and `latest=0.1.1`. Installation and development examples now use the new version.
+- Fresh verification passed: `pnpm test` (20 files, 119 tests), `pnpm typecheck`, `pnpm build`, archive allowlisting and credential-pattern checks. `pnpm audit --prod --json` reports zero vulnerabilities.
+- The exact 27-file release archive passed native interaction/isolation/quit checks and installation in isolated Desktop 0.2.1-rc.5, Web 0.2.1-rc.5 and source Web 0.2.2-alpha.2 profiles. The complete Host matrix passed again after installing the published registry version, including approvals, questions, automatic overlay launch and Host survival.
+- Registry SHA-1 and SHA-512 match the verified archive. A fresh registry tarball download is byte-identical. SHA-256: `7cc957438c6b59ce73bbccc86bcda5282d8bfdadf03b6609569c7ce6f96529c1`.
+- Workspace Python checks were attempted: `uv run pytest` stopped during collection with 22 errors; `uv run ruff .` could not launch because Ruff is unavailable. No Python implementation changed.
+- Release evidence: `/tmp/jingle-notch-release-0.1.1-vwycombf/evidence.json`; registry Host matrix: `/var/folders/s1/qy1f70fs1897ny9jlylx_b6c0000gn/T/dsh-jingle-notch-host-matrix-3bD7dC/results.json`. Authentication material remains outside the repository and release archive.
 
 ## Plugin lifecycle and Desktop runtime fix · 2026-11-04
 

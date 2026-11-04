@@ -1,7 +1,7 @@
 {
   "name": "dsh-jingle-notch",
   "description": "JingleNotch — AI Agent Approval Notifier for DeepSeek Harness. 鲸铃 Jingle brings approvals, plan reviews and live session activity to the macOS notch.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "type": "module",
   "main": "lib/index.js",

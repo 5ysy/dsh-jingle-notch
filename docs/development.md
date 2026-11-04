@@ -67,7 +67,7 @@ Useful variables: `JINGLE_NOTCH_SMOKE_SCREENSHOT` chooses the screenshot stem; `
 ## Archive verification / 打包验证
 
 ```sh
-pnpm pack --out /absolute/path/to/dsh-jingle-notch-0.1.0.tgz
+pnpm pack --out /absolute/path/to/dsh-jingle-notch-0.1.1.tgz
 ```
 
 Inspect the archive and install it into disposable Desktop/Web profiles through the matrix with `JINGLE_NOTCH_TEST_PACKAGE`. Verify the manifest name, repository, icon, exact compatibility entries, bundle module references, exports, both READMEs, linked public documentation and local image paths. Test production assets from the extracted tarball with `JINGLE_NOTCH_SMOKE_PACKAGE` before release.
@@ -83,8 +83,8 @@ Documentation references checked on 2026-11-02: [dsh-pet README](https://github.
 Authenticate with `npm login --auth-type=web`, then run the type checks, tests, build and archive verification above. Publish the exact verified tarball:
 
 ```sh
-npm publish /absolute/path/to/dsh-jingle-notch-0.1.0.tgz --access public
-npm view dsh-jingle-notch@0.1.0 version dist.integrity
+npm publish /absolute/path/to/dsh-jingle-notch-0.1.1.tgz --access public
+npm view dsh-jingle-notch@0.1.1 version dist.integrity
 ```
 
-Validate registry installation in disposable profiles through `JINGLE_NOTCH_TEST_PACKAGE=dsh-jingle-notch@0.1.0`. Keep authentication material outside the repository and archive. Tag the reviewed commit as `v0.1.0` and attach that same archive to its GitHub release.
+Validate registry installation in disposable profiles through `JINGLE_NOTCH_TEST_PACKAGE=dsh-jingle-notch@0.1.1`. Keep authentication material outside the repository and archive. Tag the reviewed commit as `v0.1.1` and attach that same archive to its GitHub release.

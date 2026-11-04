@@ -99,13 +99,13 @@ Build and pack from the plugin directory:
 
 ```sh
 pnpm build
-pnpm pack --out /absolute/path/to/dsh-jingle-notch-0.1.0.tgz
+pnpm pack --out /absolute/path/to/dsh-jingle-notch-0.1.1.tgz
 ```
 
 Then use that archive as the install spec:
 
 ```sh
-dsh plugin --profile web add /absolute/path/to/dsh-jingle-notch-0.1.0.tgz
+dsh plugin --profile web add /absolute/path/to/dsh-jingle-notch-0.1.1.tgz
 ```
 
 For Desktop, substitute the bundled CLI and `--profile desktop` while the app is quit. The tarball includes compiled Host/overlay code, original whale assets, both READMEs and the public documentation. Users installing it do not need this source checkout's `dev_docs` directory.
