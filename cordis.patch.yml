@@ -1,15 +1,16 @@
-# The JingleNotch bundle patch: one engine row plus two optional surface rows.
+# The JingleNotch bundle patch: one engine row plus native/dashboard surfaces.
 # The engine row provides the jingleNotch service to both surfaces.
 # The engine tracks every session as a pill and works in any composition.
-# The dashboard mirrors it over the web GUI's HTTP server; the slash command
-# rides the interactive command registry.
+# The dashboard mirrors it over the web GUI's HTTP server; the status command
+# rides the interactive command registry. The native overlay follows the
+# plugin lifecycle.
 #
 # Surface gates only read `profileContext`, which the launcher provides before
 # any tree row mounts — a `disabled` expression evaluated against a
 # late-registering service races row activation and the entry is
 # then never retried. The dashboard row keys on the web bundle composing this
 # profile; the commands registry ships in the base bundle, so that row needs
-# no gate. `inject` still orders both rows after the `jingleNotch` engine.
+# no gate. `inject` orders all surface rows after the `jingleNotch` engine.
 - insert:
     - id: jingle-notch
       name: dsh-jingle-notch
@@ -18,6 +19,10 @@
       name: dsh-jingle-notch/dashboard
       inject: [jingleNotch, webServer, connection]
       disabled: !!js "!ctx.get('profileContext')?.startedBundles.includes('@deepseek-ai/dsh-web-app')"
+
+    - id: jingle-notch-autostart
+      name: dsh-jingle-notch/autostart
+      inject: [jingleNotch, webServer]
 
     - id: jingle-notch-commands
       name: dsh-jingle-notch/commands

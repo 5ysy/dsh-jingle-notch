@@ -33,7 +33,7 @@ Open DeepSeek Harness once to initialize it, then fully quit the application. Ru
   plugin --profile desktop add dsh-jingle-notch
 ```
 
-Reopen the app and enter `/jingle overlay` in a session to open the notch companion.
+Reopen the app with the plugin enabled. The notch companion starts automatically with the Desktop Host.
 
 ### Web
 
@@ -42,9 +42,9 @@ dsh plugin --profile web add dsh-jingle-notch
 dsh web
 ```
 
-Enter `/jingle overlay` in a session to open the overlay, or visit `/jingle` at your Harness server address for the browser panel. Restart an existing Web server after installation.
+Restart an existing Web server after installation. With the plugin enabled, the overlay starts automatically when the Host starts; visit `/jingle` at your Harness server address for the browser panel.
 
-Desktop and Web use separate profiles; install into each one you use. The native overlay requires macOS and Electron. First launch can download Electron through npm and needs Node/npm and network access. You can also configure an existing Electron executable; see [installation](docs/installation.md).
+Desktop and Web use separate profiles; install into each one you use. The native overlay requires macOS and a graphical session. The plugin installs a separate Electron runtime so the Desktop Host can launch the overlay; Web/source Hosts can use a configured Electron executable or the documented npm fallback. See [installation](docs/installation.md).
 
 ## Plugin features
 
@@ -80,9 +80,7 @@ The plugin declares compatibility with `0.2.1-rc.5` and `0.2.2-alpha.2`. The nat
 ## Commands and configuration
 
 ```text
-/jingle                  Show session status
-/jingle overlay          Open the native notch overlay
-/jingle overlay stop     Close the overlay while Harness keeps running
+/jingle                  Show JingleNotch status
 ```
 
 The profile patch row is `jingle-notch`. Full configuration options, storage locations and privacy controls are documented in [configuration](docs/configuration.md). [Development and verification](docs/development.md) covers tests, packaging and the Desktop/Web matrix.

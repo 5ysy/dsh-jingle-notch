@@ -11,7 +11,6 @@ Use `$DSH_HOME/profiles/<profile>/cordis.patch.yml`; `DSH_HOME` defaults to `~/.
   config:
     overlay:
       enabled: true
-      autoStart: false
       electronPath: ''
       yOffset: 0
     notifications:
@@ -33,17 +32,17 @@ Use `$DSH_HOME/profiles/<profile>/cordis.patch.yml`; `DSH_HOME` defaults to `~/.
     finishedHoldMs: 5000
 ```
 
-The example shows the defaults. Set `overlay.autoStart: true` to launch automatically with the dashboard. Restart the corresponding Host after editing. A configuration patch needs no `name` field; if supplied, use `name: dsh-jingle-notch`. A patch replaces that row's config object; omitted settings are filled from the plugin schema defaults.
+The example shows the defaults. The overlay launches automatically when the plugin row is enabled. Restart the corresponding Host after editing. A configuration patch needs no `name` field; if supplied, use `name: dsh-jingle-notch`. A patch replaces that row's config object; omitted settings are filled from the plugin schema defaults.
 
-默认配置如上。启用自动启动可设置 `overlay.autoStart: true`。修改后重启对应宿主。配置 ID 为 `jingle-notch`；配置补丁可以省略 `name`。
+默认配置如上。启用插件后浮窗会随 Host 自动启动。修改后重启对应宿主。配置 ID 为 `jingle-notch`；配置补丁可以省略 `name`。
 
 ## Options / 选项
 
 | Key | Default | Effect |
 | --- | --- | --- |
-| `overlay.enabled` | `true` | Allow commands/dashboard to launch Electron |
-| `overlay.autoStart` | `false` | Launch when the dashboard component mounts |
-| `overlay.electronPath` | `''` | Explicit executable; empty uses local Electron then npx |
+| `overlay.enabled` | `true` | Allow the enabled plugin to launch Electron |
+| `overlay.autoStart` | `true` | Deprecated compatibility setting; startup follows the plugin switch |
+| `overlay.electronPath` | `''` | Explicit executable; empty uses the plugin's local Electron then npx |
 | `overlay.yOffset` | `0` | Integer pixels from the display top; range -200…200 |
 | `notifications.enabled` | `true` | Master switch for system notifications |
 | `notifications.onApproval` | `true` | Notify for pending tool approval |
@@ -82,7 +81,7 @@ An actively polling dashboard/overlay receives requests alongside the native Har
 - Questions support exact option labels, multiple selections, custom text, explicit skip and complete batch submission. Plans retain full detail and the offered approval label.
 - Timed questions can remain visible after a turn ends; a late answer is queued through Harness's user-question service. A discarded reply can be submitted again.
 
-请在请求开始前打开浮窗或仪表盘。后台浏览器标签可能限制轮询频率，原生浮窗会持续轮询。权限判断与最终执行仍由 Harness 的宿主服务负责；原请求的 AbortSignal 和 agent 生命周期由 Harness 管理。
+浮窗随启用的插件自动启动，后台浏览器标签可能限制轮询频率，原生浮窗会持续轮询。权限判断与最终执行仍由 Harness 的宿主服务负责；原请求的 AbortSignal 和 agent 生命周期由 Harness 管理。
 
 ## Storage and privacy / 存储与隐私
 
@@ -96,6 +95,6 @@ Both directories belong to JingleNotch. Other application data is not imported. 
 
 File previews keep the latest 20 files per session and at most 32 KiB per preview. Large-file counts are marked as estimates or omitted previews. Distinct-file statistics cap at 2,048 paths. Repeated edits accumulate added/removed lines; activity minutes accumulate per session with a one-minute cap per adjacent-event interval.
 
-System notification text may contain tool names, approval reasons or a question. Disable `notifications.enabled` to suppress it. The plugin does not add a telemetry service or an additional model request. Character images load from packaged resources. Electron's npx fallback can download a runtime; remote dashboard access uses the Harness connection service's admission checks. Loopback access checks Host/Origin; local processes able to reach the listener remain within the local trust boundary.
+System notification text may contain tool names, approval reasons or a question. Disable `notifications.enabled` to suppress it. The plugin does not add a telemetry service or an additional model request. Character images load from packaged resources. The plugin installs a matching Electron runtime so Desktop can launch the overlay as a separate application; Web/source Hosts may use the npx fallback to download a runtime. Remote dashboard access uses the Harness connection service's admission checks. Loopback access checks Host/Origin; local processes able to reach the listener remain within the local trust boundary.
 
 浮窗通过固定 preload IPC 操作审批与问答，renderer 无 Node 访问，启用 sandbox/contextIsolation/CSP。仪表盘只提供当前宿主的状态与操作；本地状态和通知中可能出现工作内容，请根据使用环境选择开关。

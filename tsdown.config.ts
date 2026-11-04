@@ -2,7 +2,7 @@ import { defineConfig } from 'tsdown'
 
 export default defineConfig([
   {
-    entry: ['src/index.ts', 'src/dashboard.ts', 'src/commands.ts'],
+    entry: ['src/index.ts', 'src/dashboard.ts', 'src/commands.ts', 'src/autostart.ts'],
     format: 'esm',
     dts: true,
     outDir: 'lib',
@@ -18,7 +18,7 @@ export default defineConfig([
   {
     // The Electron main script for the notch overlay. It imports only
     // `node:module` (Electron resolves at runtime through createRequire), so
-    // it bundles and typechecks without the electron package installed.
+    // the runtime dependency remains external to this bundle.
     entry: { 'overlay/main': 'src/overlay/main.ts' },
     format: 'esm',
     dts: false,

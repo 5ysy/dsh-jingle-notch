@@ -1,6 +1,5 @@
 /** Sandboxed preload: only fixed companion operations cross into the main process. */
-// Electron is provided by the runtime; this package has no Electron dependency.
-// @ts-expect-error Electron is intentionally a runtime-only import.
+// The plugin's Electron dependency supplies the runtime and its type declarations.
 import { contextBridge, ipcRenderer } from 'electron'
 contextBridge.exposeInMainWorld('jingleNotch', {
   onState: (callback: (state: unknown) => void) => ipcRenderer.on('jingle-notch:state', (_event: unknown, state: unknown) => callback(state)),

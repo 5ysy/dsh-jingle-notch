@@ -21,7 +21,6 @@ writeFileSync(join(directory, 'cordis.patch.yml'), `
     recap: { enabled: false }
     overlay:
       enabled: ${Boolean(process.env.JINGLE_NOTCH_TEST_ELECTRON)}
-      autoStart: false
       electronPath: ${JSON.stringify(process.env.JINGLE_NOTCH_TEST_ELECTRON ?? '')}
 - insert:
     - id: jingle-notch-host-probe

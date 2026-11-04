@@ -23,11 +23,11 @@ export interface JingleNotchConfig {
   recap?: { enabled: boolean; directory?: string }
   /** Notch overlay (Electron pill strip) options. */
   overlay: {
-    /** Whether `/jingle overlay` and the dashboard button may spawn Electron. */
+    /** Whether enabling the plugin may spawn the native Electron overlay. */
     enabled: boolean
-    /** Launch the overlay automatically when the dashboard row mounts. */
+    /** Retained for profile compatibility; the overlay now starts whenever the plugin is enabled. */
     autoStart: boolean
-    /** Explicit Electron binary; empty resolves the local install, then `npx`. */
+    /** Explicit Electron binary; empty resolves the plugin's local Electron, then `npx`. */
     electronPath: string
     /** Pixels from the top edge of the display to pin the strip. */
     yOffset: number
@@ -72,13 +72,13 @@ export const JingleNotchConfigSchema: z<JingleNotchConfig> = z.object({
   overlay: z
     .object({
       enabled: z.boolean().default(true).description('Allow the notch overlay to launch.'),
-      autoStart: z.boolean().default(false).description('Launch the overlay when the web dashboard mounts.'),
-      electronPath: z.string().default('').description('Electron binary; empty resolves the local install, then npx.'),
+      autoStart: z.boolean().default(true).description('Deprecated compatibility setting; the overlay starts when the plugin is enabled.'),
+      electronPath: z.string().default('').description('Electron binary; empty resolves the plugin local Electron, then npx.'),
       yOffset: z.number().step(1).min(-200).max(200).default(0).description('Pixels from the top edge of the display to pin the strip.'),
     })
     .default({
       enabled: true,
-      autoStart: false,
+      autoStart: true,
       electronPath: '',
       yOffset: 0,
     }),

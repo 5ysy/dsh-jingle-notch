@@ -55,10 +55,8 @@ export async function apply(ctx) {
       assert.equal(pill.stats.filesChanged, 1)
       assert.equal(pill.stats.linesAdded, 1)
       assert.equal(pill.stats.linesRemoved, 1)
-      for (const text of ['/jingle', '/jingle overlay stop']) {
-        const execution = await ctx.commands.execute(agent, text, [], abort.signal)
-        assert.equal(execution?.result.kind, 'success')
-      }
+      const execution = await ctx.commands.execute(agent, '/jingle', [], abort.signal)
+      assert.equal(execution?.result.kind, 'success')
       return { ok: true, bundles: ctx.get('profileContext').startedBundles }
     }
     assert.ok(handle, 'Call setup first')
@@ -81,10 +79,6 @@ export async function apply(ctx) {
       }))
     } else if (action === 'result') {
       return { ok: true, outcomes }
-    } else if (action === 'overlay') {
-      const result = await ctx.commands.execute(agent, '/jingle overlay', [], abort.signal)
-      assert.equal(result?.result.kind, 'success', result?.result.text)
-      return { ok: true }
     } else if (action === 'finish') {
       await pending
       assert.equal(outcomes.approval, 'allowed-once')

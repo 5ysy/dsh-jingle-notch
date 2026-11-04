@@ -1,13 +1,29 @@
 # JingleNotch implementation state
 
-Updated: 2026-11-02. Checkout: `dev_plugins/dsh-jingle-notch`. Version 0.1.0 is public on npm and GitHub Releases; main, registry integrity and actual registry installation are verified. Release work is complete.
+Updated: 2026-11-04. Checkout: `dev_plugins/dsh-jingle-notch`. Version 0.1.0 is public on npm and GitHub Releases. The lifecycle and Desktop runtime changes below are being synchronized to GitHub main; publishing an updated npm package is a separate release operation.
+
+## Plugin lifecycle and Desktop runtime fix · 2026-11-04
+
+- The native overlay now follows the `jingle-notch` plugin row. Enabling the plugin starts it through the new `jingle-notch-autostart` row after the Host Web Server is available; unloading or disabling the plugin stops the child process. The slash command remains a status command and no longer launches or stops the overlay.
+- Desktop Host runs under the bundled Electron executable with `ELECTRON_RUN_AS_NODE=1`, but that packaged executable owns the Desktop application and cannot run a second arbitrary Electron main script. The plugin now declares Electron `44.x` as a runtime dependency; overlay resolution uses that separate binary after checking an explicit configured path and falls back to `npx`.
+- `overlay.autoStart` remains accepted for profile compatibility and defaults to `true`; startup follows the plugin switch regardless of that legacy setting.
+- Verification: `pnpm typecheck`, `pnpm test` (20 files, 119 tests), `pnpm build`, the local Electron smoke test, and the released Desktop/Web Host matrix all pass. The native matrix used automatic startup and confirmed overlay state rendering, sandbox isolation, Quit, and Host survival.
+
+## Heuristic security scan disposition · 2026-11-03
+
+- A repository-wide heuristic scan reported 13 informational or warning matches and no critical findings. Source review found no corresponding exploitable issue in the previously scanned paths.
+- Dashboard `fetch` calls are same-origin requests to the plugin's fixed `/jingle/api/*` routes. Requests are protected by the loopback Host/Origin/Fetch-Metadata fence or the host connection admission layer before state or answer data is handled.
+- The `127.0.0.1`, `::1`, and mapped-loopback literals implement the local admission boundary. They are comparisons against `req.socket.remoteAddress`, not destinations supplied to a network client.
+- Desktop notifications use `spawn` with shell execution disabled. Linux and macOS values are passed as argument values; AppleScript text escapes backslashes and quotes, and Windows PowerShell values use single-quoted literals with apostrophe doubling.
+- The overlay's Swift call uses `execFile('/usr/bin/swift', ['-e', screenProbe], ...)`; both the executable path and script are fixed, with a timeout and output limit. Overlay polling uses the validated host origin and fixed API paths, and the environment reads are limited to the overlay's parent/origin hand-off.
+- Verification after the review: `pnpm typecheck`, `pnpm test` (18 files, 116 tests), and `pnpm build` pass. The workspace-level `uv run pytest` remains blocked by 21 pre-existing Python SDK import errors, and `uv run ruff .` cannot start because Ruff is unavailable.
 
 ## Identity and runtime contracts
 
 - Product: JingleNotch; repository/npm: dsh-jingle-notch; character: 鲸铃 Jingle; positioning: AI Agent Approval Notifier.
 - Service/types: `ctx.jingleNotch`, `JingleNotchService`, `JingleNotchConfig`, `JingleNotchSnapshot`.
-- Bundle rows: `jingle-notch`, `jingle-notch-dashboard`, `jingle-notch-commands`.
-- Command: `/jingle`, `/jingle overlay`, `/jingle overlay stop`; HTTP: `/jingle` and `/jingle/api/*`.
+- Bundle rows: `jingle-notch`, `jingle-notch-dashboard`, `jingle-notch-autostart`, `jingle-notch-commands`.
+- Command: `/jingle` status; HTTP: `/jingle` and `/jingle/api/*`. The native overlay follows the plugin switch.
 - Native bridge: `window.jingleNotch`; shared renderer: `window.JingleNotchSurface`; IPC: `jingle-notch:*`; assets: `jingle-notch-whale://art`.
 - Runtime environment: `DSH_JINGLE_NOTCH_*`; test environment: `JINGLE_NOTCH_*`.
 - macOS preferences: `~/Library/Application Support/dsh-jingle-notch/overlay-preferences.json`; recap default: `~/.local/share/dsh-jingle-notch`.
@@ -16,7 +32,7 @@ Updated: 2026-11-02. Checkout: `dev_plugins/dsh-jingle-notch`. Version 0.1.0 is 
 
 ## Decisions and baseline
 
-- Scope includes source, built artifacts, unit/native/Host fixtures, metadata and all public docs. No dependency or lockfile change is intended.
+- Scope includes source, built artifacts, unit/native/Host fixtures, metadata and all public docs. The published package now carries Electron `44.x` as a runtime dependency, with the corresponding lockfile update.
 - Existing user profiles, stored sessions/preferences and running applications are not modified. Verification uses isolated temporary profiles and synthetic sessions with no model calls.
 - Baseline and historical engineering evidence: `/var/folders/s1/qy1f70fs1897ny9jlylx_b6c0000gn/T/jingle-notch-namespace-baseline-20261102.0af86t_l/plugin`.
 - The public repository is `5ysy/dsh-jingle-notch`. npm name check on 2026-11-02 returned 404 before publication. The user authorized public GitHub and npm publication; CLI authentication is complete.
@@ -24,7 +40,7 @@ Updated: 2026-11-02. Checkout: `dev_plugins/dsh-jingle-notch`. Version 0.1.0 is 
 ## Verification
 
 - Regression checks first failed on the unwanted second command, missing `/jingle` HTTP endpoint and incorrect row name in the generated configuration hint. All pass after the namespace update.
-- Final `pnpm typecheck`, `pnpm test` (18 files, 116 tests) and `pnpm build` pass. No dependencies were added; the lockfile is byte-identical to the baseline.
+- Final `pnpm typecheck`, `pnpm test` (20 files, 119 tests) and `pnpm build` pass. The Electron `44.x` dependency is present in the package manifest and lockfile.
 - Installed the tarball through actual official CLI commands in three disposable profiles: packaged macOS Desktop `0.2.1-rc.5`, released Web `0.2.1-rc.5`, source Web `0.2.2-alpha.2` at `ce7073d`. All pass installation/bundle gates, new service/commands/routes, real agent/session/tool/diff events, approval service/audit, duplicate rejection, complete plans and multi-select answers, incomplete-answer rejection, CSP/Origin fences, native overlay launch/isolation/quit and continued Host availability. No model request or human-driven chat was exercised.
 - Detailed extracted-package Electron smoke passes: animation frame changes, reduced motion and decode recovery, eight sessions/four visible pills with scrolling, stable colors/sorting, native hover/resize/settings, new-request expansion and selection, composition/draft retention, complete plan and structured answer/approval delivery, dashboard CSP/focus, clean Quit and Host survival. The preferences assertion reads `dsh-jingle-notch/overlay-preferences.json` in the isolated app-data root. Final screenshot was visually inspected.
 - The final archive contains 25 files and 38 valid local documentation/image links, including the full third-party MIT notice. Tests, internal state documents and development assets are excluded. Retired identifiers are absent from project text, generated output and packed text. The final archive differs from the native/Host-tested archive only in the reviewed sound-module documentation comment; executable code and every other packed file are byte-identical.

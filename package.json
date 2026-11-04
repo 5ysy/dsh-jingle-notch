@@ -19,6 +19,10 @@
       "types": "./lib/commands.d.ts",
       "default": "./lib/commands.js"
     },
+    "./autostart": {
+      "types": "./lib/autostart.d.ts",
+      "default": "./lib/autostart.js"
+    },
     "./cordis.patch.yml": "./cordis.patch.yml",
     "./package.json": "./package.json"
   },
@@ -59,6 +63,9 @@
   "peerDependencies": {
     "@deepseek-ai/cordis": ">=4.0.5",
     "@deepseek-ai/schemastery": ">=3.18.5"
+  },
+  "dependencies": {
+    "electron": "^44.7.0"
   },
   "devDependencies": {
     "@deepseek-ai/cordis": "^4.0.5",

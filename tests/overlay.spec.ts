@@ -13,6 +13,12 @@ describe('overlay launcher', () => {
     expect(resolveElectron('/definitely/missing/electron')).toBeUndefined()
   })
 
+  it('does not treat a packaged Desktop host as a standalone Electron runtime', () => {
+    const result = resolveElectron('')
+    expect(result?.command).not.toBe('/Applications/DeepSeek Harness')
+    expect(['local electron', 'npx electron (downloads on first use)']).toContain(result?.label)
+  })
+
   it('points at the bundled main artifact location', () => {
     expect(overlayMainPath()).toMatch(/overlay[\\/]main\.js$/u)
   })

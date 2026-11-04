@@ -1,6 +1,6 @@
 /**
  * Electron notch-overlay launcher: resolves an Electron binary (explicit
- * config path, then the local install, then `npx`), spawns the bundled main
+ * config path, then the plugin's local Electron install, then `npx`), spawns the bundled main
  * script pointed at the plugin's state URL, and tracks the child so the
  * overlay dies with the plugin. All failure modes are actionable messages —
  * the overlay is an optional surface and must never block the host.
@@ -52,7 +52,7 @@ export function launchOverlay(
       child: running,
       result: {
         ok: false,
-        message: 'overlay: no Electron found — install it with `pnpm add -w electron`, or set overlay.electronPath',
+        message: 'overlay: configured Electron path does not exist — set overlay.electronPath to a valid executable or clear it',
       },
     }
   }
@@ -93,8 +93,9 @@ function isHttpOrigin(value: string): boolean {
 /**
  * Electron binary resolution order: explicit config path, the local
  * `electron` install (its main export is the binary path), then `npx`, which
- * downloads on first use. `undefined` only occurs when a configured path is
- * set but missing, so the caller can report the misconfiguration.
+ * downloads on first use. A packaged Desktop executable is intentionally not
+ * used here: it starts the already-installed Desktop application and cannot
+ * evaluate an arbitrary overlay entrypoint.
  */
 export function resolveElectron(configPath: string | undefined): ResolvedElectron | undefined {
   if (configPath !== undefined && configPath.length > 0) {

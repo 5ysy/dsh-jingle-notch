@@ -158,25 +158,6 @@ export function apply(ctx: Context): void {
     }),
   )
 
-  // Optional auto-start once the origin is bound: the listener may bind after
-  // this row mounts, so retry `getOrigin()` briefly before giving up.
-  if (jingleNotch.configuration.overlay.enabled && jingleNotch.configuration.overlay.autoStart) {
-    let timer: ReturnType<typeof setTimeout> | undefined
-    const attempt = (left: number): void => {
-      try {
-        const result = jingleNotch.startOverlay(webServer.getOrigin())
-        ctx.logger.info(`jingle-notch: ${result.message}`)
-      } catch (error: unknown) {
-        if (left > 0) timer = setTimeout(() => attempt(left - 1), 500)
-        else ctx.logger.warn(`jingle-notch: overlay auto-start gave up waiting for the webserver port: ${String(error)}`)
-      }
-    }
-    attempt(60)
-    ctx.effect(() => () => {
-      if (timer !== undefined) clearTimeout(timer)
-    })
-  }
-
   ctx.logger.info('jingle-notch: dashboard at /jingle')
 }
 

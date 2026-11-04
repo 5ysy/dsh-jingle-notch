@@ -15,13 +15,13 @@
 
 The public repository is [5ysy/dsh-jingle-notch](https://github.com/5ysy/dsh-jingle-notch). The npm distribution is [dsh-jingle-notch](https://www.npmjs.com/package/dsh-jingle-notch). Users install compiled code through the Harness profile CLI; source builds and release checks are documented below.
 
-The checkout is `dev_plugins/dsh-jingle-notch`. The Host service is `ctx.jingleNotch`; bundle row IDs are `jingle-notch`, `jingle-notch-dashboard` and `jingle-notch-commands`. The command and HTTP root are `/jingle`, IPC channels use `jingle-notch:`, whale resources use `jingle-notch-whale://art`, runtime variables use `DSH_JINGLE_NOTCH_*` and test variables use `JINGLE_NOTCH_*`. Preferences and recap history belong to `dsh-jingle-notch` directories. No compatibility aliases or data imports are provided.
+The checkout is `dev_plugins/dsh-jingle-notch`. The Host service is `ctx.jingleNotch`; bundle row IDs are `jingle-notch`, `jingle-notch-dashboard`, `jingle-notch-autostart` and `jingle-notch-commands`. The command and HTTP root are `/jingle`, IPC channels use `jingle-notch:`, whale resources use `jingle-notch-whale://art`, runtime variables use `DSH_JINGLE_NOTCH_*` and test variables use `JINGLE_NOTCH_*`. Preferences and recap history belong to `dsh-jingle-notch` directories. No compatibility aliases or data imports are provided.
 
 Third-party copyright and permission notices ship in [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md).
 
 ## Build and tests / 构建与测试
 
-Use Node >=24.9.0 and pnpm. The package uses the host Cordis and Schemastery peer dependencies; Electron is resolved separately at runtime.
+Use Node >=24.9.0 and pnpm. The package uses the host Cordis and Schemastery peer dependencies and installs a matching Electron runtime for the native overlay.
 
 ```sh
 pnpm install --frozen-lockfile
@@ -46,7 +46,7 @@ pnpm test:harness
 
 - `JINGLE_NOTCH_DSH_DESKTOP_APP`: actual packaged Desktop Host and that application's released Web runtime.
 - `JINGLE_NOTCH_DSH_SOURCE`: built source Web CLI. Build Harness first; tests require `apps/cli/lib/bin.js`.
-- `JINGLE_NOTCH_ELECTRON`: optional. Runs the production overlay through the plugin command, checks Host Session rendering, sandbox isolation, native Quit and continued Host availability. Omit to check disabled-overlay handling.
+- `JINGLE_NOTCH_ELECTRON`: optional. Runs the production overlay through plugin auto-start, checks Host Session rendering, sandbox isolation, native Quit and continued Host availability. Omit to check disabled-overlay handling.
 - `JINGLE_NOTCH_TEST_PACKAGE`: optional package path/tarball to install instead of the current checkout, for archive installation checks.
 
 Every target uses a temporary `DSH_HOME` and official Web profile template. Desktop starts through its actual bundled Host entry with ready/shutdown IPC. The matrix installs `dsh-jingle-notch`, exercises `/jingle`, real agent/session/tool/diff events, approval service/audit, full plan and multi-select question answers, invalid/duplicate replies, dashboard CSP/Origin checks and clean teardown. It makes no model calls. The emitted evidence directory contains redacted logs and `results.json`.

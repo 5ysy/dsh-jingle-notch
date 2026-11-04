@@ -125,7 +125,7 @@ ${surfaceCss}
   <header>
     <h1>JingleNotch<span class="dot">.</span></h1>
     <span class="sub">AI Agent Approval Notifier</span>
-    <button class="overlay-btn" id="overlayBtn" title="Launch the notch overlay (Electron)">🗗 notch overlay</button>
+    <button class="overlay-btn" id="overlayBtn" title="Restart the notch overlay (Electron)">↻ notch overlay</button>
     <span class="uptime" id="uptime"></span>
   </header>
 

@@ -1,8 +1,8 @@
 /**
  * JingleNotch command surface: the `/jingle` slash command summarizes the
  * companion state directly in an interactive UI, without a model round trip;
- * `/jingle overlay` launches the notch overlay when the composition has a
- * webserver. The row declares `inject: [jingleNotch, commands]`.
+ * The overlay lifecycle follows the enabled plugin; this command only reports
+ * status. The row declares `inject: [jingleNotch, commands]`.
  */
 import type { Context } from '@deepseek-ai/cordis'
 import type {} from './events.ts'
@@ -13,28 +13,12 @@ export const inject = ['jingleNotch', 'commands']
 
 export function apply(ctx: Context): void {
   const handler = (invocation: CommandInvocationLike): CommandResultLike => {
-    const argument = invocation.rawInput?.trim() ?? ''
-    if (argument === 'overlay stop' || argument === '浮窗 退出') {
-      const result = ctx.jingleNotch.stopOverlay()
-      return { kind: result.ok ? 'success' : 'error', text: `JingleNotch ${result.message}` }
-    }
-    if (argument === 'overlay' || argument === '浮窗') {
-      const webServer = ctx.get('webServer')
-      if (webServer === undefined) {
-        return { kind: 'error', text: 'JingleNotch overlay: needs a composition with the web GUI server' }
-      }
-      if (!ctx.jingleNotch.configuration.overlay.enabled) {
-        return { kind: 'error', text: 'JingleNotch overlay: disabled by config (overlay.enabled)' }
-      }
-      const result = ctx.jingleNotch.startOverlay(webServer.getOrigin())
-      return { kind: result.ok ? 'success' : 'error', text: `JingleNotch ${result.message}` }
-    }
     return { kind: 'success', text: statusText(ctx.jingleNotch.snapshot()) }
   }
   ctx.commands.register({
     name: 'jingle',
-    description: 'Show JingleNotch status or control its notch overlay',
-    input: { hint: '[overlay [stop]]' },
+    description: 'Show JingleNotch status',
+    input: { hint: '[status]' },
     handler,
   })
 }

@@ -33,7 +33,7 @@ JingleNotch 支持 DeepSeek Harness 桌面版和 Web 版，也提供相同能力
   plugin --profile desktop add dsh-jingle-notch
 ```
 
-重新打开应用，在会话中输入 `/jingle overlay`，即可打开鲸铃刘海浮窗。
+重新打开应用并保持插件启用，桌面 Host 启动时会自动打开鲸铃刘海浮窗。
 
 ### Web 版
 
@@ -42,9 +42,9 @@ dsh plugin --profile web add dsh-jingle-notch
 dsh web
 ```
 
-在会话中输入 `/jingle overlay` 打开浮窗，也可在 Harness 的服务地址后访问 `/jingle` 使用浏览器面板。已经运行的 Web 服务需要重启。
+启用插件后，Host 启动时会自动打开浮窗；也可在 Harness 的服务地址后访问 `/jingle` 使用浏览器面板。已经运行的 Web 服务需要重启。
 
-桌面版和 Web 版分别安装到各自的 profile。原生浮窗需要 macOS 和 Electron；首次启动会尝试通过 npm 下载 Electron，需要 Node/npm 和网络。已有 Electron 时可直接指定路径，详见[安装说明](docs/installation.md)。
+桌面版和 Web 版分别安装到各自的 profile。原生浮窗需要 macOS 和图形桌面；插件会安装独立的 Electron runtime，让桌面 Host 可以启动浮窗，Web/源码 Host 可配置 Electron 路径或使用安装说明中的 npm 回退方案。详见[安装说明](docs/installation.md)。
 
 ## 插件功能
 
@@ -80,9 +80,7 @@ dsh web
 ## 命令与配置
 
 ```text
-/jingle                  查看会话状态
-/jingle overlay          打开原生刘海浮窗
-/jingle overlay stop     关闭浮窗并保持 Harness 运行
+/jingle                  查看鲸铃状态
 ```
 
 profile 补丁中的配置 ID 是 `jingle-notch`。完整配置、存储位置和隐私开关见[配置说明](docs/configuration.md)；测试、打包和 Desktop/Web 验证见[开发与验证](docs/development.md)。

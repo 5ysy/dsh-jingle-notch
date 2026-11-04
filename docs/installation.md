@@ -6,8 +6,8 @@
 
 - DeepSeek Harness: verified on Desktop/Web `0.2.1-rc.5` and source Web `0.2.2-alpha.2`. The native overlay is tested on macOS.
 - Development and current Web/source Harness: Node >=24.9.0 and pnpm. Desktop includes its host Node runtime.
-- Native overlay: a graphical desktop and an Electron executable. Resolution order is `overlay.electronPath` → local `electron` installation → `npx --yes electron`.
-- First-use npx downloads need Node/npm on PATH and network access. Desktop's bundled host runtime alone does not provide a standalone Electron overlay executable. Configure a separate Electron executable if you want to avoid the npx fallback.
+- Native overlay: a graphical desktop. Resolution order is `overlay.electronPath` → the plugin's local `electron` dependency → `npx --yes electron`.
+- The plugin installs a matching Electron runtime for Desktop and Web. Web/source Hosts may use the npx fallback when that dependency is unavailable; configure `overlay.electronPath` to use a known executable and avoid a first-use download.
 - Safe-area measurement uses macOS `/usr/bin/swift`; if unavailable, the overlay uses bounded menu-bar geometry. It follows the primary display.
 
 ## Install from npm / 从 npm 安装
@@ -25,7 +25,7 @@ For macOS Desktop, open the app once, fully quit it, then run:
   plugin --profile desktop add dsh-jingle-notch
 ```
 
-Restart the owning Host and enter `/jingle overlay` in a session. Desktop and Web have separate plugin lists. npm installs the compiled package; building source is only required for local development.
+Restart the owning Host with the plugin enabled. The native overlay starts with the Host; Desktop and Web have separate plugin lists. npm installs the compiled package; building source is only required for local development.
 
 更新已安装的 npm 插件时，先停止对应宿主，将上述命令中的包名改为 `dsh-jingle-notch@latest` 再运行，然后重新启动宿主。首次启动浮窗的 Electron 要求见下文。
 
@@ -49,7 +49,7 @@ dsh plugin --profile web add /absolute/path/to/dsh-jingle-notch
 dsh web
 ```
 
-Restart an already-running `dsh web` after installation. `/jingle` prints status; `/jingle overlay` opens the notch panel. The companion dashboard is `/jingle` on the listener address printed by Harness.
+Restart an already-running `dsh web` after installation. `/jingle` prints status. The companion dashboard is `/jingle` on the listener address printed by Harness, and the native overlay starts with the enabled plugin.
 
 ## Official macOS Desktop / 官方桌面版
 
@@ -62,7 +62,7 @@ Restart an already-running `dsh web` after installation. `/jingle` prints status
   plugin --profile desktop add /absolute/path/to/dsh-jingle-notch
 ```
 
-4. Reopen Desktop and enter `/jingle overlay` in a session.
+4. Reopen Desktop with the plugin enabled; the overlay starts with the Desktop Host.
 
 If the app is installed elsewhere, use that app's `Contents/Resources/runtime/cli/bin/dsh`. Its **Manage dsh Command…** menu can register the bundled CLI as `dsh`. The npm/source CLI cannot manage the reserved `desktop` profile. Desktop and Web have independent plugin lists.
 
@@ -77,14 +77,13 @@ Edit the `jingle-notch` row in the profile's `cordis.patch.yml`:
   config:
     overlay:
       enabled: true
-      autoStart: true
       electronPath: '/absolute/path/to/Electron.app/Contents/MacOS/Electron'
       yOffset: 0
 ```
 
-An empty `electronPath` uses auto-resolution. Select an actual Electron executable that can run arbitrary app scripts; the signed DeepSeek Harness application executable belongs to its own application. A local development option is `pnpm add -D electron@<version-you-select>` in your own environment, then use the installed binary's absolute path. This repository does not require Electron to run unit tests or build.
+An empty `electronPath` uses auto-resolution. The published plugin carries Electron `44.x`, which runs as a separate application on Desktop; the signed DeepSeek Harness executable is never used as the overlay runtime because it starts the existing Desktop application and cannot evaluate an arbitrary entrypoint. For source checkouts, `pnpm install` provisions the same local Electron dependency. Set `electronPath` only when you need another Electron build. This repository does not require Electron to run unit tests or build.
 
-`autoStart` defaults to `false`. With it enabled, restarting the corresponding Host launches the overlay automatically. Leave `enabled: true` and use `/jingle overlay` for manual launch.
+The overlay starts automatically whenever the plugin is enabled and the Host has a webserver. Keep `overlay.enabled: true` for the native surface. The plugin's Electron dependency supplies the separate runtime required by the Desktop application.
 
 ## Update a local installation / 更新本地安装
 

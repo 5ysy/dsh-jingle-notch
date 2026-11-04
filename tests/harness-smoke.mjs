@@ -152,10 +152,9 @@ for (const target of targets) {
     await until(() => json(origin, '/__jingle-notch-host-test/result', {}), result => result.outcomes.question)
     const evidence = await json(origin, '/__jingle-notch-host-test/finish', {})
     if (electron) {
-      await json(origin, '/__jingle-notch-host-test/overlay', {})
       const resultFile = join(overlayDirectory, 'result.json')
       for (let i = 0; i < 300 && !existsSync(resultFile); i++) await pause(100)
-      assert.ok(existsSync(resultFile), 'Production overlay did not exit through its Quit button')
+      assert.ok(existsSync(resultFile), 'Auto-started production overlay did not exit through its Quit button')
       assert.deepEqual(JSON.parse(readFileSync(resultFile, 'utf8')), { ok: true, exited: true })
       await json(origin, '/jingle/api/state')
     } else {
